@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define EINVAL 22
+
 typedef struct	s_fork
 {
 	pthread_mutex_t	*fork_lock;
@@ -35,5 +37,6 @@ typedef struct	s_sim
 }				t_sim;
 
 int error(char *mes, t_sim *sim);
+int setup(t_sim *sim);
 
 #endif
