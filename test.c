@@ -35,31 +35,20 @@
 // 	return (0);
 // }
 
-static int ret1()
+void *run()
 {
-	printf("from 1\n");
-	return (0);
-}
-
-static int ret2()
-{
-	printf("from 2\n");
-	return (0);
-}
-
-static int ret3()
-{
-	printf("from 3\n");
-	return (1);
-}
-
-static int ret()
-{
-	return (ret1() || ret2() || ret3());
+	int i = 0;
+	while (i < 5)
+		i++;
+	return (NULL);
 }
 
 int main()
 {
-	printf("%d\n", ret());
+	pthread_t t;
+	pthread_create(&t, NULL, run, NULL);
+	while (1)
+		;
+
 	return (0);
 }

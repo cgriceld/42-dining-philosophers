@@ -41,7 +41,11 @@ static void *cycle(void *p)
 	t_philo *phil;
 
 	phil = (t_philo *)p;
-
+	while (phil->already_eat != phil->sim->total_meals)
+	{
+		
+	}
+	return (NULL);
 }
 
 void simulation(t_sim *sim)
@@ -54,14 +58,20 @@ void simulation(t_sim *sim)
 	{
 		sim->philos[i].last_eat = sim->start;
 		if (pthread_create(sim->threads[i++], NULL, cycle, &sim->philos[i]))
-			return (error("thread error", sim));
+		{
+			error("thread error", NULL);
+			return ;
+		}
 	}
 	if (supervisor(sim))
 		return ;
 	i = 0;
 	while (i < sim->num)
 	{
-		if (pthread_join(*sim->threads[i], NULL))
-			return (error("thread error", NULL));
+		if (pthread_join(*sim->threads[i++], NULL))
+		{
+			error("thread error", NULL);
+			return ;
+		}
 	}
 }

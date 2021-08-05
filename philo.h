@@ -60,6 +60,9 @@ typedef struct	s_sim
 int error(char *mes, t_sim *sim);
 int setup(t_sim *sim);
 void simulation(t_sim *sim);
+int supervisor(t_sim *sim);
+int sim_print(t_philo *phil, int flag, char *mes);
+int isit_end(t_philo *phil);
 int ft_atoi(size_t *target, char *arg);
 size_t now(void);
 
