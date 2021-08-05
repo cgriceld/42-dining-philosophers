@@ -5,8 +5,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 
 #define EINVAL 22
+#define DIED "died\n"
+#define FORK "has taken a fork\n"
+#define EAT "is eating\n"
+#define SLEEP "is sleeping\n"
+#define THINK "is thinking\n"
+
+typedef enum	e_print
+{
+	ERROR,
+	PHILO
+}				t_print;
 
 typedef struct	s_fork
 {
@@ -22,8 +34,13 @@ typedef struct	s_philo
 	pthread_mutex_t	*lasteat_lock;
 	t_fork	*left_fork;
 	t_fork	*right_fork;
+	t_sim	*sim;
 }				t_philo;
 
+/*
+** start - start time of simulation in ms
+** end - flag to end simualtion
+*/
 typedef struct	s_sim
 {
 	size_t num;
@@ -31,15 +48,19 @@ typedef struct	s_sim
 	size_t to_eat;
 	size_t to_sleep;
 	size_t total_meals;
+	size_t start;
 	t_philo *philos;
 	t_fork *forks;
 	pthread_t **threads;
 	pthread_mutex_t	*print_lock;
-	int end;
 	pthread_mutex_t	*end_lock;
+	int end;
 }				t_sim;
 
 int error(char *mes, t_sim *sim);
 int setup(t_sim *sim);
+void simulation(t_sim *sim);
+int ft_atoi(size_t *target, char *arg);
+size_t now(void);
 
 #endif

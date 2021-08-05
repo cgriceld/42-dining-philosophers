@@ -1,15 +1,5 @@
 #include "philo.h"
 
-static int	ft_atoi(size_t *target, char *arg)
-{
-	*target = 0;
-	while (*arg >= '0' && *arg <= '9')
-		*target = *target * 10 + (*arg++ - 48);
-	if (*arg)
-		return (1);
-	return (0);
-}
-
 static int	parser(t_sim *sim, int argc, char **argv)
 {
 	if (argc != 5 || argc != 6)
@@ -35,6 +25,7 @@ int			main(int argc, char **argv)
 		return (0);
 	if (setup(&sim))
 		return (1);
+	simulation(&sim);
 	error(NULL, &sim);
 	return (0);
 }
