@@ -1,39 +1,5 @@
 #include "philo.h"
 
-static void	clean(t_sim *sim)
-{
-	size_t i;
-
-	free(sim->philos);
-	if (sim->status_lock && pthread_mutex_destroy(sim->status_lock) != EINVAL)
-		error("mutex error", NULL);
-	free(sim->status_lock);
-	i = 0;
-	while (i < sim->num)
-	{
-		if (sim->forks)
-		{
-			if (sim->forks[i].fork_lock && \
-				pthread_mutex_destroy(sim->forks[i].fork_lock) != EINVAL)
-				error("mutex error", NULL);
-			free(sim->forks[i].fork_lock);
-		}
-		if (sim->threads)
-			free(sim->threads[i]);
-	}
-	free(sim->forks);
-	free(sim->threads);
-}
-
-int			error(char *mes, t_sim *sim)
-{
-	if (mes)
-		printf("Error : %s\n", mes);
-	if (sim)
-		clean(sim);
-	return (1);
-}
-
 static int	ft_atoi(size_t *target, char *arg)
 {
 	*target = 0;
@@ -62,6 +28,7 @@ int			main(int argc, char **argv)
 {
 	t_sim sim;
 
+	memset(&sim, 0, sizeof(t_sim));
 	if (parser(&sim, argc, argv))
 		return (1);
 	if (argc == 6 && !sim.total_meals)

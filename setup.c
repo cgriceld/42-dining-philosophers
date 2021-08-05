@@ -1,18 +1,26 @@
 #include "philo.h"
 
-static int	setup_utils(t_sim *sim)
+static int	setup_mtx(pthread_mutex_t *mtx, t_sim *sim)
+{
+	mtx = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!mtx)
+		return (error("malloc error", sim));
+	if (pthread_mutex_init(mtx, NULL))
+		return (error("mutex error", sim));
+	return (0);
+}
+
+static int	setup_sim(t_sim *sim)
 {
 	size_t i;
 
 	i = 0;
 	while (i < sim->num)
 	{
-		sim->forks[i].fork_lock = \
-		(pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (!sim->forks[i].fork_lock)
-			return (error("malloc error", sim));
-		if (pthread_mutex_init(sim->forks[i].fork_lock, NULL))
-			return (error("mutex error", sim));
+		if (setup_mtx(sim->forks[i].fork_lock, sim))
+			return (1);
+		if (setup_mtx(sim->philos[i].lasteat_lock, sim))
+			return (1);
 		sim->philos[i].id = i + 1;
 		sim->philos[i].left_fork = &sim->forks[i];
 		sim->philos[i].right_fork = &sim->forks[(i + 1) % sim->num];
@@ -24,18 +32,20 @@ static int	setup_utils(t_sim *sim)
 	return (0);
 }
 
-
 int			setup(t_sim *sim)
 {
 	sim->philos = (t_philo *)malloc(sizeof(t_philo) * sim->num);
-	sim->forks = (t_fork *)malloc(sizeof(t_fork) * sim->num);
-	sim->status_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	sim->threads = (pthread_t **)malloc(sizeof(pthread_t *) * sim->num);
-	if (!sim->philos || !sim->forks || !sim->status_lock || !sim->threads)
+	if (!sim->philos)
 		return (error("malloc error", sim));
-	if (pthread_mutex_init(sim->status_lock, NULL))
-		return (error("mutex error", sim));
+	memset(sim->philos, 0, sizeof(t_fork) * sim->num);
+	sim->forks = (t_fork *)malloc(sizeof(t_fork) * sim->num);
+	if (!sim->forks)
+		return (error("malloc error", sim));
 	memset(sim->forks, 0, sizeof(t_fork) * sim->num);
+	sim->threads = (pthread_t **)malloc(sizeof(pthread_t *) * sim->num);
+	if (!sim->threads)
+		return (error("malloc error", sim));
 	memset(sim->threads, 0, sizeof(pthread_t *) * sim->num);
-	return (setup_utils(sim));
+	return (setup_mtx(sim->print_lock, sim) || setup_mtx(sim->end_lock, sim) \
+			|| setup_sim(sim));
 }

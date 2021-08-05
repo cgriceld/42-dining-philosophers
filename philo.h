@@ -19,6 +19,7 @@ typedef struct	s_philo
 	size_t	id;
 	size_t	already_eat;
 	size_t	last_eat;
+	pthread_mutex_t	*lasteat_lock;
 	t_fork	*left_fork;
 	t_fork	*right_fork;
 }				t_philo;
@@ -33,7 +34,9 @@ typedef struct	s_sim
 	t_philo *philos;
 	t_fork *forks;
 	pthread_t **threads;
-	pthread_mutex_t	*status_lock;
+	pthread_mutex_t	*print_lock;
+	int end;
+	pthread_mutex_t	*end_lock;
 }				t_sim;
 
 int error(char *mes, t_sim *sim);
