@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LIBFLAGS = -pthread
 
-SRC = main.c clean.c setup.c
+SRC = main.c clean.c setup.c routine.c simulation.c supervisor.c utils.c
 OBJ = $(SRC:.c=.o)
 
 %.o: %.c

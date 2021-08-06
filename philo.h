@@ -63,6 +63,10 @@ void simulation(t_sim *sim);
 int supervisor(t_sim *sim);
 int sim_print(t_philo *phil, int flag, char *mes);
 int isit_end(t_philo *phil);
+t_fork *choose_fork(t_philo *phil);
+int forks(t_philo *phil, t_fork *fork);
+int eat(t_philo *phil);
+int pwait(size_t to_do, size_t to_die);
 int ft_atoi(size_t *target, char *arg);
 size_t now(void);
 
