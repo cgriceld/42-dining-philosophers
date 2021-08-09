@@ -1,6 +1,42 @@
 #include "philo.h"
 
-int pwait(size_t to_do, size_t to_die)
+int			sim_print(t_philo *phil, int flag, char *mes)
+{
+	if (pthread_mutex_lock(phil->sim->print_lock))
+		return (error("mutex lock error", NULL));
+	if (flag == ERROR)
+		error(mes, NULL);
+	else
+	{
+		if (pthread_mutex_lock(phil->sim->end_lock))
+			return (error("mutex lock error", NULL));
+		if (!phil->sim->end || (phil->sim->end && mes == DIED))
+			printf("%zums %zu %s", now() - phil->sim->start, phil->id, mes);
+		if (pthread_mutex_unlock(phil->sim->end_lock))
+			return (error("mutex unlock error", NULL));
+	}
+	if (pthread_mutex_unlock(phil->sim->print_lock))
+		return (error("mutex unlock error", NULL));
+	if (flag == ERROR)
+		return (1);
+	return (0);
+}
+
+static int	isit_end(t_philo *phil)
+{
+	int flag;
+
+	if (pthread_mutex_lock(phil->sim->end_lock))
+		return (sim_print(phil, ERROR, "mutex lock error"));
+	flag = 0;
+	if (phil->sim->end)
+		flag++;
+	if (pthread_mutex_unlock(phil->sim->end_lock))
+		return (sim_print(phil, ERROR, "mutex unlock error"));
+	return (flag);
+}
+
+int			pwait(size_t to_do, size_t to_die)
 {
 	size_t begin;
 	size_t curr;
@@ -17,7 +53,7 @@ int pwait(size_t to_do, size_t to_die)
 	return (0);
 }
 
-void *cycle(void *p)
+static void	*cycle(void *p)
 {
 	t_philo *phil;
 	int res;
@@ -46,7 +82,7 @@ void *cycle(void *p)
 	return (NULL);
 }
 
-int simulation(t_sim *sim)
+int			simulation(t_sim *sim)
 {
 	size_t i;
 
@@ -55,14 +91,13 @@ int simulation(t_sim *sim)
 	while (i < sim->num)
 	{
 		sim->philos[i].last_eat = sim->start;
-		if (pthread_create(sim->threads[i], NULL, cycle, &sim->philos[i]))
-		{
-			error("thread error", NULL);
+		if (pthread_create(sim->threads[i], NULL, cycle, &sim->philos[i]) && \
+			error("thread error", NULL))
 			return (0);
-		}
 		i++;
 	}
 	if (supervisor(sim))
 		return (0);
+	printf("get out of this shit\n");
 	return (1);
 }

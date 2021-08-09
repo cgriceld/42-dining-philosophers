@@ -1,6 +1,6 @@
 #include "philo.h"
 
-static int mark_end(t_sim *sim, size_t id, int *res)
+static int	mark_end(t_sim *sim, size_t id, int *res)
 {
 	if (pthread_mutex_lock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex lock error"));
@@ -16,7 +16,7 @@ static int mark_end(t_sim *sim, size_t id, int *res)
 	return (0);
 }
 
-int supervisor(t_sim *sim)
+int			supervisor(t_sim *sim)
 {
 	size_t id;
 	int res;
