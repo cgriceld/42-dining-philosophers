@@ -34,6 +34,7 @@ typedef struct	s_philo
 	size_t			id;
 	size_t			last_eat;
 	int				already_eat;
+	int				alive;
 	pthread_mutex_t	*lasteat_lock;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
@@ -53,6 +54,7 @@ typedef struct	s_sim
 	size_t			start;
 	int				total_meals;
 	int				end;
+	int				in_process;
 	t_philo			*philos;
 	t_fork			*forks;
 	pthread_t		**threads;

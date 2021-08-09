@@ -21,6 +21,7 @@ static int	setup_sim(t_sim *sim)
 			return (1);
 		if (setup_mtx(&sim->philos[i].lasteat_lock, sim))
 			return (1);
+		sim->philos[i].alive = 1;
 		sim->philos[i].sim = sim;
 		sim->philos[i].id = i + 1;
 		sim->philos[i].left_fork = &(sim->forks[i]);
@@ -35,6 +36,7 @@ static int	setup_sim(t_sim *sim)
 
 int			setup(t_sim *sim)
 {
+	sim->in_process = sim->num;
 	sim->philos = (t_philo *)malloc(sizeof(t_philo) * sim->num);
 	if (!sim->philos)
 		return (error("malloc error", sim));

@@ -22,7 +22,7 @@ int			sim_print(t_philo *phil, int flag, char *mes)
 	return (0);
 }
 
-static int	isit_end(t_philo *phil)
+static int	isit_end(t_philo *phil, int after_eat)
 {
 	int flag;
 
@@ -30,7 +30,13 @@ static int	isit_end(t_philo *phil)
 		return (sim_print(phil, ERROR, "mutex lock error"));
 	flag = 0;
 	if (phil->sim->end)
-		flag++;
+		flag = 1;
+	if (!flag && after_eat && (++phil->already_eat == phil->sim->total_meals))
+	{
+		flag = 1;
+		phil->sim->in_process--;
+		phil->alive = 0;
+	}
 	if (pthread_mutex_unlock(phil->sim->end_lock))
 		return (sim_print(phil, ERROR, "mutex unlock error"));
 	return (flag);
@@ -61,9 +67,9 @@ static void	*cycle(void *p)
 	phil = (t_philo *)p;
 	while (1)
 	{
-		if (isit_end(phil) || forks(phil, choose_fork(phil)))
+		if (isit_end(phil, 0) || forks(phil, choose_fork(phil)))
 			return (NULL);
-		res = isit_end(phil);
+		res = isit_end(phil, 0);
 		if (!res && eat(phil))
 			res = 1;
 		if (pthread_mutex_unlock(phil->right_fork->fork_lock) || \
@@ -74,9 +80,9 @@ static void	*cycle(void *p)
 		}
 		if (res)
 			return (NULL);
-		if (isit_end(phil) || sim_print(phil, PHILO, SLEEP) || \
+		if (isit_end(phil, 1) || sim_print(phil, PHILO, SLEEP) || \
 			pwait(phil->sim->to_sleep, phil->sim->to_die) || \
-			isit_end(phil) || sim_print(phil, PHILO, THINK))
+			isit_end(phil, 0) || sim_print(phil, PHILO, THINK))
 			return (NULL);
 	}
 	return (NULL);

@@ -11,8 +11,6 @@ int			eat(t_philo *phil)
 		return (1);
 	if (pwait(phil->sim->to_eat, phil->sim->to_die))
 		return (1);
-	if (++phil->already_eat == phil->sim->total_meals)
-		return (1);
 	return (0);
 }
 
