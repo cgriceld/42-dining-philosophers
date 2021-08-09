@@ -12,8 +12,8 @@ int		ft_atoi(size_t *target, char *arg)
 
 size_t	now(void)
 {
-	struct timeval time;
+	struct timeval t;
 
-	gettimeofday(&time, NULL);
-	return ((size_t)time.tv_usec / 1000 + (size_t)time.tv_sec * 1000);
+	gettimeofday(&t, NULL);
+	return ((size_t)t.tv_sec * 1000 + (size_t)t.tv_usec / 1000);
 }

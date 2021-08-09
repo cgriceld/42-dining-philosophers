@@ -2,15 +2,22 @@
 
 static int	parser(t_sim *sim, int argc, char **argv)
 {
-	if (argc != 5 || argc != 6)
+	size_t total;
+
+	if (argc < 5 || argc > 6)
 		return (error("invalid argument", NULL));
 	if (argc == 5)
 		sim->total_meals = -1;
 	if (ft_atoi(&sim->num, argv[1]) || sim->num < 2 || \
 		ft_atoi(&sim->to_die, argv[2]) || ft_atoi(&sim->to_eat, argv[3]) || \
-		ft_atoi(&sim->to_sleep, argv[4]) || \
-		(argc == 6 && ft_atoi(&sim->total_meals, argv[5])))
+		ft_atoi(&sim->to_sleep, argv[4]))
 		return (error("invalid argument", NULL));
+	if (argc == 6)
+	{
+		total = (size_t)sim->total_meals;
+		if (ft_atoi(&total, argv[5]))
+			return (error("invalid argument", NULL));
+	}
 	return (0);
 }
 

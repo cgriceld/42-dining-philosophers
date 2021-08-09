@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #define EINVAL 22
 #define DIED "died\n"
@@ -13,6 +14,8 @@
 #define EAT "is eating\n"
 #define SLEEP "is sleeping\n"
 #define THINK "is thinking\n"
+
+typedef struct s_sim t_sim;
 
 typedef enum	e_print
 {
@@ -22,6 +25,7 @@ typedef enum	e_print
 
 typedef struct	s_fork
 {
+	int id;
 	pthread_mutex_t	*fork_lock;
 	size_t			last_user;
 }				t_fork;
@@ -29,7 +33,7 @@ typedef struct	s_fork
 typedef struct	s_philo
 {
 	size_t	id;
-	size_t	already_eat;
+	int already_eat;
 	size_t	last_eat;
 	pthread_mutex_t	*lasteat_lock;
 	t_fork	*left_fork;
@@ -47,7 +51,7 @@ typedef struct	s_sim
 	size_t to_die;
 	size_t to_eat;
 	size_t to_sleep;
-	size_t total_meals;
+	int total_meals;
 	size_t start;
 	t_philo *philos;
 	t_fork *forks;
@@ -67,6 +71,7 @@ t_fork *choose_fork(t_philo *phil);
 int forks(t_philo *phil, t_fork *fork);
 int eat(t_philo *phil);
 int pwait(size_t to_do, size_t to_die);
+void *cycle(void *p);
 int ft_atoi(size_t *target, char *arg);
 size_t now(void);
 

@@ -35,20 +35,23 @@
 // 	return (0);
 // }
 
-void *run()
-{
-	int i = 0;
-	while (i < 5)
-		i++;
-	return (NULL);
-}
+// void *run()
+// {
+// 	int i = 0;
+// 	while (i < 5)
+// 		i++;
+// 	return (NULL);
+// }
 
 int main()
 {
-	pthread_t t;
-	pthread_create(&t, NULL, run, NULL);
-	while (1)
-		;
-
+	int i = 0;
+	while (i < 5)
+	{
+		if (i == 0)
+			continue;
+		printf("%d\n", i);
+		i++;
+	}
 	return (0);
 }

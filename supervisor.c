@@ -4,6 +4,7 @@ static int mark_end(t_sim *sim, size_t id, int *res)
 {
 	if (pthread_mutex_lock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex lock error"));
+	printf("super blocks end\n");
 	if (sim->philos[id].already_eat != sim->total_meals)
 	{
 		sim->end = 1;
@@ -11,6 +12,7 @@ static int mark_end(t_sim *sim, size_t id, int *res)
 	}
 	if (pthread_mutex_unlock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
+	printf("super unblocks end\n");
 	if (*res)
 		return (sim_print(&sim->philos[id], PHILO, DIED));
 	return (0);
