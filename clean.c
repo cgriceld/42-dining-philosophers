@@ -19,8 +19,8 @@ static void	clean(t_sim *sim)
 
 	clean_mtx(sim->print_lock);
 	clean_mtx(sim->end_lock);
-	i = -1;
-	while (++i < sim->num)
+	i = 0;
+	while (i < sim->num)
 	{
 		if (sim->philos)
 			clean_mtx(sim->philos[i].lasteat_lock);
@@ -28,6 +28,7 @@ static void	clean(t_sim *sim)
 			clean_mtx(sim->forks[i].fork_lock);
 		if (sim->threads)
 			free(sim->threads[i]);
+		i++;
 	}
 	free(sim->philos);
 	free(sim->forks);

@@ -24,6 +24,7 @@ static int	parser(t_sim *sim, int argc, char **argv)
 int			main(int argc, char **argv)
 {
 	t_sim sim;
+	size_t i;
 
 	memset(&sim, 0, sizeof(t_sim));
 	if (parser(&sim, argc, argv))
@@ -32,7 +33,21 @@ int			main(int argc, char **argv)
 		return (0);
 	if (setup(&sim))
 		return (1);
-	simulation(&sim);
+	if (simulation(&sim))
+	{
+		i = 0;
+		while (i < sim.num)
+		{
+			printf("wait for %zu\n", i);
+			if (pthread_join(*sim.threads[i], NULL))
+			{
+				error("thread error", NULL);
+				break ;
+			}
+			i++;
+		}
+		printf("JOIN ALL\n");
+	}
 	error(NULL, &sim);
 	return (0);
 }

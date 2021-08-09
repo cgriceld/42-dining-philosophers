@@ -25,7 +25,6 @@ typedef enum	e_print
 
 typedef struct	s_fork
 {
-	int id;
 	pthread_mutex_t	*fork_lock;
 	size_t			last_user;
 }				t_fork;
@@ -63,7 +62,7 @@ typedef struct	s_sim
 
 int error(char *mes, t_sim *sim);
 int setup(t_sim *sim);
-void simulation(t_sim *sim);
+int simulation(t_sim *sim);
 int supervisor(t_sim *sim);
 int sim_print(t_philo *phil, int flag, char *mes);
 int isit_end(t_philo *phil);

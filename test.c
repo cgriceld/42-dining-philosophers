@@ -43,15 +43,14 @@
 // 	return (NULL);
 // }
 
+int *test()
+{
+	return ((void *)1);
+}
+
 int main()
 {
-	int i = 0;
-	while (i < 5)
-	{
-		if (i == 0)
-			continue;
-		printf("%d\n", i);
-		i++;
-	}
+	int *ptr = test();
+	printf("%p\n", ptr);
 	return (0);
 }

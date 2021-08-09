@@ -26,31 +26,27 @@ void *cycle(void *p)
 	while (phil->already_eat != phil->sim->total_meals)
 	{
 		if (isit_end(phil) || forks(phil, choose_fork(phil)))
-			break;
+			return (NULL);
 		res = isit_end(phil);
 		if (!res && eat(phil))
 			res = 1;
-		if (pthread_mutex_unlock(phil->right_fork->fork_lock))
-			sim_print(phil, ERROR, "mutex unlock error");
-		printf("%zu unblocks %d fork\n", phil->id, phil->right_fork->id);
-		if (pthread_mutex_unlock(phil->left_fork->fork_lock))
-			sim_print(phil, ERROR, "mutex unlock error");
-		printf("%zu unblocks %d fork\n", phil->id, phil->left_fork->id);
-		if (res)
+		if (pthread_mutex_unlock(phil->right_fork->fork_lock) || \
+			pthread_mutex_unlock(phil->left_fork->fork_lock))
 		{
-			printf("%zu exit because death pf smb\n", phil->id);
-			break;
+			sim_print(phil, ERROR, "mutex unlock error");
+			res = 1;
 		}
+		if (res)
+			return (NULL);
 		if (isit_end(phil) || sim_print(phil, PHILO, SLEEP) || \
 			pwait(phil->sim->to_sleep, phil->sim->to_die) || \
 			isit_end(phil) || sim_print(phil, PHILO, THINK))
-			break;
+			return (NULL);
 	}
-	printf("%zu returned!!!\n", phil->id);
 	return (NULL);
 }
 
-void simulation(t_sim *sim)
+int simulation(t_sim *sim)
 {
 	size_t i;
 
@@ -62,27 +58,11 @@ void simulation(t_sim *sim)
 		if (pthread_create(sim->threads[i], NULL, cycle, &sim->philos[i]))
 		{
 			error("thread error", NULL);
-			return ;
+			return (0);
 		}
 		i++;
 	}
 	if (supervisor(sim))
-	{
-		printf("get out of this shit\n");
-		return ;
-	}
-	printf("get out of this shit\n");
-	//return;
-	i = 0;
-	while (i < sim->num)
-	{
-		printf("wait for %zu\n", i);
-		if (pthread_join(*sim->threads[i], NULL))
-		{
-			error("thread error", NULL);
-			return ;
-		}
-		i++;
-	}
-	printf("JOIN ALL\n");
+		return (0);
+	return (1);
 }
