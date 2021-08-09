@@ -4,14 +4,11 @@ static int	mark_end(t_sim *sim, size_t id, int *res)
 {
 	if (pthread_mutex_lock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex lock error"));
-	if (sim->philos[id].already_eat != sim->total_meals)
-	{
-		sim->end = 1;
-		*res = 1;
-	}
+	sim->end = 1;
 	if (pthread_mutex_unlock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
-	if (*res)
+	*res = 1;
+	if (sim->philos[id].already_eat != sim->total_meals)
 		return (sim_print(&sim->philos[id], PHILO, DIED));
 	return (0);
 }

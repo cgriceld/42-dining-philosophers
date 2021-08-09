@@ -55,11 +55,11 @@ int			pwait(size_t to_do, size_t to_die)
 
 static void	*cycle(void *p)
 {
-	t_philo *phil;
-	int res;
+	t_philo	*phil;
+	int		res;
 
 	phil = (t_philo *)p;
-	while (phil->already_eat != phil->sim->total_meals)
+	while (1)
 	{
 		if (isit_end(phil) || forks(phil, choose_fork(phil)))
 			return (NULL);
@@ -98,6 +98,5 @@ int			simulation(t_sim *sim)
 	}
 	if (supervisor(sim))
 		return (0);
-	printf("get out of this shit\n");
 	return (1);
 }

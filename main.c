@@ -39,14 +39,12 @@ int			main(int argc, char **argv)
 		i = 0;
 		while (i < sim.num)
 		{
-			printf("wait for %zu\n", i);
 			if (pthread_join(*sim.threads[i], NULL) && \
 				error("thread error", NULL))
 				break ;
 			i++;
 		}
 	}
-	printf("join all\n");
 	error(NULL, &sim);
 	return (0);
 }

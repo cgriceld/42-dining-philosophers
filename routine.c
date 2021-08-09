@@ -9,8 +9,9 @@ int			eat(t_philo *phil)
 		return (sim_print(phil, ERROR, "mutex unlock error"));
 	if (sim_print(phil, PHILO, EAT))
 		return (1);
-	phil->already_eat++;
 	if (pwait(phil->sim->to_eat, phil->sim->to_die))
+		return (1);
+	if (++phil->already_eat == phil->sim->total_meals)
 		return (1);
 	return (0);
 }
