@@ -2,7 +2,7 @@ NAME = philo
 HEADER = philo.h
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LIBFLAGS = -pthread
 
 SRC = main.c clean.c setup.c routine.c simulation.c supervisor.c utils.c

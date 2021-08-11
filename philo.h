@@ -41,10 +41,6 @@ typedef struct	s_philo
 	t_sim			*sim;
 }				t_philo;
 
-/*
-** start - start time of simulation in ms
-** end - flag to end simualtion
-*/
 typedef struct	s_sim
 {
 	size_t			num;

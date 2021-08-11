@@ -2,7 +2,7 @@
 
 42 Unix project. Solution of classical synchronization problem about [dining philosophers](https://en.wikipedia.org/wiki/Dining_philosophers_problem) where each philosopher is a thread and mutexes are used to prevent deadlocks.
 
-Runing with number of philosophers more than 200 is underfined behaviour.
+Runing with number of philosophers > 200 and time_to_die or time_to_eat or time_to_sleep less than 60 ms may cause underfined behaviour. 
 
 Example test cases:
 * 1 800 200 200 - dies, no second fork
