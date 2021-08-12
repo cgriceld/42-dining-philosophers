@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:47:04 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:47:05 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	setup_mtx(pthread_mutex_t **mtx, t_sim *sim)
@@ -12,7 +24,7 @@ static int	setup_mtx(pthread_mutex_t **mtx, t_sim *sim)
 
 static int	setup_sim(t_sim *sim)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < sim->num)
@@ -34,7 +46,7 @@ static int	setup_sim(t_sim *sim)
 	return (0);
 }
 
-int			setup(t_sim *sim)
+int	setup(t_sim *sim)
 {
 	sim->in_process = sim->num;
 	sim->philos = (t_philo *)malloc(sizeof(t_philo) * sim->num);

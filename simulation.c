@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   simulation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:47:44 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:47:46 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-int			sim_print(t_philo *phil, int flag, char *mes)
+int	sim_print(t_philo *phil, int flag, char *mes)
 {
 	if (pthread_mutex_lock(phil->sim->print_lock))
 		return (error("mutex lock error", NULL));
@@ -24,7 +36,7 @@ int			sim_print(t_philo *phil, int flag, char *mes)
 
 static int	isit_end(t_philo *phil, int after_eat)
 {
-	int flag;
+	int	flag;
 
 	if (pthread_mutex_lock(phil->sim->end_lock))
 		return (sim_print(phil, ERROR, "mutex lock error"));
@@ -42,10 +54,10 @@ static int	isit_end(t_philo *phil, int after_eat)
 	return (flag);
 }
 
-int			pwait(size_t to_do, size_t to_die)
+int	pwait(size_t to_do, size_t to_die)
 {
-	size_t begin;
-	size_t curr;
+	size_t	begin;
+	size_t	curr;
 
 	begin = now();
 	curr = begin;
@@ -85,12 +97,11 @@ static void	*cycle(void *p)
 			isit_end(phil, 0) || sim_print(phil, PHILO, THINK))
 			return (NULL);
 	}
-	return (NULL);
 }
 
-int			simulation(t_sim *sim)
+int	simulation(t_sim *sim)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	sim->start = now();

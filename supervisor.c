@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   supervisor.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:49:04 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:49:06 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-// 1 - error, 
 static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
 {
 	if (pthread_mutex_lock(sim->end_lock))
@@ -20,12 +31,11 @@ static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
 	return (0);
 }
 
-// 1 - error
-int			supervisor(t_sim *sim)
+int	supervisor(t_sim *sim)
 {
-	size_t id;
-	int susp;
-	int print;
+	size_t	id;
+	int		susp;
+	int		print;
 
 	id = 0;
 	while (1)

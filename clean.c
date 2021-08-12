@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   clean.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:43:03 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:43:06 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	clean_mtx(pthread_mutex_t *mtx)
 {
-	int res;
+	int	res;
 
 	if (mtx)
-	{ // unlock?
+	{
 		res = pthread_mutex_destroy(mtx);
 		if (res && res != EINVAL)
 			error("mutex error", NULL);
@@ -15,7 +27,7 @@ static void	clean_mtx(pthread_mutex_t *mtx)
 
 static void	clean(t_sim *sim)
 {
-	size_t i;
+	size_t	i;
 
 	clean_mtx(sim->print_lock);
 	clean_mtx(sim->end_lock);
@@ -35,7 +47,7 @@ static void	clean(t_sim *sim)
 	free(sim->threads);
 }
 
-int			error(char *mes, t_sim *sim)
+int	error(char *mes, t_sim *sim)
 {
 	if (mes)
 		printf("Error : %s\n", mes);

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:45:51 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:45:53 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-int			eat(t_philo *phil)
+int	eat(t_philo *phil)
 {
 	if (pthread_mutex_lock(phil->lasteat_lock))
 		return (sim_print(phil, ERROR, "mutex lock error"));
@@ -14,7 +26,7 @@ int			eat(t_philo *phil)
 	return (0);
 }
 
-t_fork		*choose_fork(t_philo *phil)
+t_fork	*choose_fork(t_philo *phil)
 {
 	if (phil->id % 2)
 		return (phil->left_fork);
@@ -30,10 +42,10 @@ static int	throw_fork(t_philo *phil, t_fork *curr_fork)
 	return (0);
 }
 
-int			forks(t_philo *phil, t_fork *fork)
+int	forks(t_philo *phil, t_fork *fork)
 {
-	int i;
-	t_fork *curr_fork;
+	int		i;
+	t_fork	*curr_fork;
 
 	i = 3;
 	curr_fork = fork;
@@ -45,11 +57,11 @@ int			forks(t_philo *phil, t_fork *fork)
 		{
 			if (throw_fork(phil, curr_fork))
 				return (1);
-			continue;
+			continue ;
 		}
 		curr_fork->last_user = phil->id;
-		if (sim_print(phil, PHILO, FORK) || (phil->sim->num == 1 && \
-										throw_fork(phil, curr_fork)))
+		if (sim_print(phil, PHILO, FORK) || \
+		(phil->sim->num == 1 && throw_fork(phil, curr_fork)))
 			return (1);
 		if (phil->id % 2)
 			curr_fork = phil->right_fork;

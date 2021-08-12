@@ -1,39 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/12 11:45:36 by cgriceld          #+#    #+#             */
+/*   Updated: 2021/08/12 11:45:38 by cgriceld         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/time.h>
-#include <unistd.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/time.h>
+# include <unistd.h>
 
-#define EINVAL 22
-#define DIED "died\n"
-#define FORK "has taken a fork\n"
-#define EAT "is eating\n"
-#define SLEEP "is sleeping\n"
-#define THINK "is thinking\n"
+# define EINVAL 22
+# define DIED "died\n"
+# define FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
 
-typedef struct s_sim t_sim;
+typedef struct s_sim	t_sim;
 
-typedef enum	e_print
+typedef enum e_print
 {
 	ERROR,
 	PHILO
 }				t_print;
 
-typedef struct	s_fork
+typedef struct s_fork
 {
 	pthread_mutex_t	*fork_lock;
 	size_t			last_user;
 }				t_fork;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	size_t			id;
 	size_t			last_eat;
-	int				already_eat;
+	size_t			already_eat;
 	int				alive;
 	pthread_mutex_t	*lasteat_lock;
 	t_fork			*left_fork;
@@ -41,14 +53,14 @@ typedef struct	s_philo
 	t_sim			*sim;
 }				t_philo;
 
-typedef struct	s_sim
+typedef struct s_sim
 {
 	size_t			num;
 	size_t			to_die;
 	size_t			to_eat;
 	size_t			to_sleep;
 	size_t			start;
-	int				total_meals;
+	size_t			total_meals;
 	int				end;
 	int				in_process;
 	t_philo			*philos;
