@@ -62,7 +62,7 @@ typedef struct s_sim
 	size_t			start;
 	size_t			total_meals;
 	int				end;
-	int				in_process;
+	size_t			in_process;
 	t_philo			*philos;
 	t_fork			*forks;
 	pthread_t		**threads;

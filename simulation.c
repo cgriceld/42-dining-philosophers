@@ -22,8 +22,8 @@ int	sim_print(t_philo *phil, int flag, char *mes)
 	{
 		if (pthread_mutex_lock(phil->sim->end_lock))
 			return (error("mutex lock error", NULL));
-		if (!phil->sim->end || (phil->sim->end && mes == DIED))
-			printf("%zums %zu %s", now() - phil->sim->start, phil->id, mes);
+		if (!phil->sim->end)
+			printf("%zu %zu %s", now() - phil->sim->start, phil->id, mes);
 		if (pthread_mutex_unlock(phil->sim->end_lock))
 			return (error("mutex unlock error", NULL));
 	}
@@ -56,12 +56,14 @@ static int	isit_end(t_philo *phil, int after_eat)
 
 int	pwait(size_t to_do, size_t to_die)
 {
-	size_t	begin;
+	size_t	end;
 	size_t	curr;
+	size_t	begin;
 
-	begin = now();
-	curr = begin;
-	while (curr - begin < to_do)
+	end = now() + to_do;
+	curr = now();
+	begin = curr;
+	while (curr < end)
 	{
 		usleep(100);
 		curr = now();

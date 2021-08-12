@@ -12,6 +12,16 @@
 
 #include "philo.h"
 
+static int	report_dead(t_philo *phil)
+{
+	if (pthread_mutex_lock(phil->sim->print_lock))
+		return (error("mutex lock error", NULL));
+	printf("%zu %zu died\n", now() - phil->sim->start, phil->id);
+	if (pthread_mutex_unlock(phil->sim->print_lock))
+		return (error("mutex unlock error", NULL));
+	return (0);
+}
+
 static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
 {
 	if (pthread_mutex_lock(sim->end_lock))
@@ -26,10 +36,14 @@ static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
 	}
 	if (pthread_mutex_unlock(sim->end_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
+	if ((!*susp || *print) && \
+		pthread_mutex_unlock(sim->philos[id].lasteat_lock))
+		return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
 	if (*print)
-		return (sim_print(&sim->philos[id], PHILO, DIED));
+		return (report_dead(&sim->philos[id]));
 	return (0);
 }
+
 
 int	supervisor(t_sim *sim)
 {
@@ -46,8 +60,6 @@ int	supervisor(t_sim *sim)
 		susp = 0;
 		if (sim->to_die < now() - sim->philos[id].last_eat)
 			susp = 1;
-		if (pthread_mutex_unlock(sim->philos[id].lasteat_lock))
-			return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
 		if (susp)
 		{
 			if (check_health(sim, id, &susp, &print))
@@ -55,7 +67,8 @@ int	supervisor(t_sim *sim)
 			if (!susp || print)
 				return (0);
 		}
-		if (++id == sim->num)
-			id = 0;
+		if (pthread_mutex_unlock(sim->philos[id].lasteat_lock))
+			return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
+		id = (id + 1) % sim->num;
 	}
 }
