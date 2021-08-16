@@ -1,6 +1,10 @@
 # 42-dining-philosophers
 
-42 Unix project. Solution of classical synchronization problem about [dining philosophers](https://en.wikipedia.org/wiki/Dining_philosophers_problem) where each philosopher is a thread and mutexes are used to prevent deadlocks. 
+42 Unix project. Solution of classical synchronization problem about [dining philosophers](https://en.wikipedia.org/wiki/Dining_philosophers_problem) where each philosopher is a thread and mutexes are used to prevent deadlocks.\
+The code is written in accordance with The Norm (42 coding style).
+
+⚠️ On slow hardware or if CPU is highly loaded during execution the perfomance may differ form expected one.\
+Also the project was written and tested on Mac OS, so the result on others OS may differ as well.
 
 ##  usage
 
@@ -20,10 +24,7 @@ Example test cases:
 * 5 800 200 200 7 - stops after each philosopher eat at least 7 times
 * 4 410 200 200 - no one dies, never stops
 * 4 310 200 100 - stops because of death of one philosopher
-* 200 410 200 200
-* 199 800 200 200
-* 200 1000 200 200 live
-* 100 180 60 60 live
+* 200 1000 200 200 - no one dies (but depends)
 
 ***Makefile***
 * *`make`* -- compiles `philo` executable.
