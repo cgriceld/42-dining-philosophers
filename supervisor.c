@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   supervisor.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 11:49:04 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/08/12 11:49:06 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 static int	report_dead(t_philo *phil)
@@ -17,9 +5,8 @@ static int	report_dead(t_philo *phil)
 	if (pthread_mutex_lock(phil->sim->print_lock))
 		return (error("mutex lock error", NULL));
 	printf("%zu %zu died\n", now() - phil->sim->start, phil->id);
-	if (pthread_mutex_unlock(phil->sim->print_lock))
-		return (error("mutex unlock error", NULL));
-	return (0);
+	return (pthread_mutex_unlock(phil->sim->print_lock) ? \
+		error("mutex unlock error", NULL) : 0);
 }
 
 static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
@@ -39,9 +26,7 @@ static int	check_health(t_sim *sim, size_t id, int *susp, int *print)
 	if ((!*susp || *print) && \
 		pthread_mutex_unlock(sim->philos[id].lasteat_lock))
 		return (sim_print(&sim->philos[0], ERROR, "mutex unlock error"));
-	if (*print)
-		return (report_dead(&sim->philos[id]));
-	return (0);
+	return (*print ? report_dead(&sim->philos[id]) : 0);
 }
 
 

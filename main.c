@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 11:43:25 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/08/12 11:43:27 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 static int	parser(t_sim *sim, int argc, char **argv)
@@ -18,12 +6,11 @@ static int	parser(t_sim *sim, int argc, char **argv)
 		return (error("invalid argument", NULL));
 	if (argc == 5)
 		sim->total_meals = -1;
-	if (ft_atoi(&sim->num, argv[1]) || !sim->num || \
+	return ((ft_atoi(&sim->num, argv[1]) || !sim->num || \
 		ft_atoi(&sim->to_die, argv[2]) || ft_atoi(&sim->to_eat, argv[3]) || \
 		ft_atoi(&sim->to_sleep, argv[4]) || \
-		(argc == 6 && ft_atoi(&sim->total_meals, argv[5])))
-		return (error("invalid argument", NULL));
-	return (0);
+		(argc == 6 && ft_atoi(&sim->total_meals, argv[5]))) ? \
+		error("invalid argument", NULL) : 0);
 }
 
 int	main(int argc, char **argv)

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   setup.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 11:47:04 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/08/12 11:47:05 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 static int	setup_mtx(pthread_mutex_t **mtx, t_sim *sim)
@@ -17,9 +5,7 @@ static int	setup_mtx(pthread_mutex_t **mtx, t_sim *sim)
 	*mtx = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (!*mtx)
 		return (error("malloc error", sim));
-	if (pthread_mutex_init(*mtx, NULL))
-		return (error("mutex error", sim));
-	return (0);
+	return (pthread_mutex_init(*mtx, NULL) ? error("mutex error", sim) : 0);
 }
 
 static int	setup_sim(t_sim *sim)
@@ -29,9 +15,8 @@ static int	setup_sim(t_sim *sim)
 	i = 0;
 	while (i < sim->num)
 	{
-		if (setup_mtx(&sim->forks[i].fork_lock, sim))
-			return (1);
-		if (setup_mtx(&sim->philos[i].lasteat_lock, sim))
+		if (setup_mtx(&sim->forks[i].fork_lock, sim) || \
+			setup_mtx(&sim->philos[i].lasteat_lock, sim))
 			return (1);
 		sim->philos[i].alive = 1;
 		sim->philos[i].sim = sim;

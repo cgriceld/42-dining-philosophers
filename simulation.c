@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   simulation.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgriceld <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 11:47:44 by cgriceld          #+#    #+#             */
-/*   Updated: 2021/08/12 11:47:46 by cgriceld         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo.h"
 
 int	sim_print(t_philo *phil, int flag, char *mes)
@@ -29,9 +17,7 @@ int	sim_print(t_philo *phil, int flag, char *mes)
 	}
 	if (pthread_mutex_unlock(phil->sim->print_lock))
 		return (error("mutex unlock error", NULL));
-	if (flag == ERROR)
-		return (1);
-	return (0);
+	return (flag == ERROR ? 1 : 0);
 }
 
 static int	isit_end(t_philo *phil, int after_eat)
@@ -49,9 +35,8 @@ static int	isit_end(t_philo *phil, int after_eat)
 		phil->sim->in_process--;
 		phil->alive = 0;
 	}
-	if (pthread_mutex_unlock(phil->sim->end_lock))
-		return (sim_print(phil, ERROR, "mutex unlock error"));
-	return (flag);
+	return (pthread_mutex_unlock(phil->sim->end_lock) ? \
+			sim_print(phil, ERROR, "mutex unlock error") : flag);
 }
 
 int	pwait(size_t to_do, size_t to_die)
@@ -92,9 +77,7 @@ static void	*cycle(void *p)
 			sim_print(phil, ERROR, "mutex unlock error");
 			res = 1;
 		}
-		if (res)
-			return (NULL);
-		if (isit_end(phil, 1) || sim_print(phil, PHILO, SLEEP) || \
+		if (res || isit_end(phil, 1) || sim_print(phil, PHILO, SLEEP) || \
 			pwait(phil->sim->to_sleep, phil->sim->to_die) || \
 			isit_end(phil, 0) || sim_print(phil, PHILO, THINK))
 			return (NULL);
@@ -115,7 +98,5 @@ int	simulation(t_sim *sim)
 			return (0);
 		i++;
 	}
-	if (supervisor(sim))
-		return (0);
-	return (1);
+	return (supervisor(sim) ? 0 : 1);
 }
