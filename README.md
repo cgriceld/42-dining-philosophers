@@ -24,7 +24,7 @@ Example test cases:
 * 5 800 200 200 7 - stops after each philosopher eat at least 7 times
 * 4 410 200 200 - no one dies, never stops
 * 4 310 200 100 - stops because of death of one philosopher
-* 200 1000 200 200 - no one dies (but depends)
+* 200 1000 200 200 - no one dies (but depends on CPU situation)
 
 ***Makefile***
 * *`make`* -- compiles `philo` executable.
